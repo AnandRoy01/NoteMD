@@ -1,20 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "motion/react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 
 export function SiteHeader() {
+  const pathname = usePathname();
   return (
     <header className="border-b">
       <div className="container flex h-14 items-center px-4">
         <Link href="/" className="text-xl font-semibold">
           Markdown Generator
         </Link>
-        <nav className="ml-6 hidden sm:flex items-center gap-3 text-sm">
-          <Link href="/" className="hover:underline">Home</Link>
-          <Link href="/html-to-md" className="hover:underline">HTML → MD</Link>
+        <nav className="ml-6 hidden sm:flex items-center gap-4 text-sm">
+          {[
+            { href: "/", label: "Home" },
+            { href: "/html-to-md", label: "HTML → MD" },
+          ].map(({ href, label }) => {
+            const active = pathname === href;
+            return (
+              <div key={href} className="relative">
+                <Link href={href} className="hover:text-foreground/80 transition-colors">
+                  {label}
+                </Link>
+                <motion.span
+                  layoutId="nav-underline"
+                  className="absolute left-0 -bottom-1 h-0.5 bg-foreground"
+                  style={{ width: active ? "100%" : 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              </div>
+            );
+          })}
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />

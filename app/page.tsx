@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Copy,
@@ -74,6 +74,7 @@ export default function Home() {
   const [activeTabId, setActiveTabId] = useState("tab-1");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { toast } = useToast();
+  const [editorFocused, setEditorFocused] = useState(false);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId) || tabs[0];
 
@@ -183,12 +184,15 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="container flex-1 p-4 flex flex-col">
+  <div className="container flex-1 min-h-0 p-4 flex flex-col">
         <div className="flex items-center border-b mb-4">
           <div className="flex-1 flex overflow-x-auto">
             {tabs.map((tab) => (
               <motion.button
                 whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                layout
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
@@ -220,30 +224,46 @@ export default function Home() {
           </Button>
         </div>
 
-        <div
-          className={`grid flex-1 gap-4 ${
+        <motion.div
+          className={`grid flex-1 min-h-0 gap-4 ${
             isFullscreen ? "" : "md:grid-cols-2"
           }`}
+          layout
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {!isFullscreen && (
-            <div className="flex flex-col">
+            <motion.div className="flex flex-col min-h-0" layout>
               <h2 className="mb-2 text-sm font-medium">Editor</h2>
-              <Textarea
-                className="flex-1 resize-none font-mono text-sm"
-                value={activeTab.content}
-                onChange={(e) => handleTabContentChange(e.target.value)}
-                placeholder="Type your markdown here..."
-              />
-            </div>
+              <motion.div
+                animate={{ boxShadow: editorFocused ? "0 0 0 2px hsl(var(--ring))" : "0 0 0 0px rgba(0,0,0,0)" }}
+                transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                className="rounded-md flex-1 flex"
+              >
+                <Textarea
+                  className="flex-1 h-full resize-none font-mono text-sm"
+                  value={activeTab.content}
+                  onFocus={() => setEditorFocused(true)}
+                  onBlur={() => setEditorFocused(false)}
+                  onChange={(e) => handleTabContentChange(e.target.value)}
+                  placeholder="Type your markdown here..."
+                />
+              </motion.div>
+            </motion.div>
           )}
 
-          <div className="flex flex-col">
+          <motion.div className="flex flex-col min-h-0" layout>
             <h2 className="mb-2 text-sm font-medium">Preview</h2>
-            <div className="rounded-md border flex-1 p-4 overflow-auto">
+            <motion.div
+              key={activeTabId}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.15 }}
+              className="rounded-md border flex-1 p-4 overflow-auto"
+            >
               <MarkdownPreview markdown={activeTab.content} />
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
 
       <footer className="border-t py-4">
