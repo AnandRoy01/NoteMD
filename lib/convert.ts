@@ -63,12 +63,33 @@ export function htmlToMarkdown(html: string): string {
         return '  \n'
       case 'p':
         return `\n\n${children.trim()}\n\n`
+      case 'div':
+        return `\n\n${children.trim()}\n\n`
       case 'strong':
       case 'b':
         return `**${children.trim()}**`
       case 'em':
       case 'i':
         return `*${children.trim()}*`
+      case 'u':
+        return `<u>${children.trim()}</u>`
+      case 'sup':
+        return `<sup>${children.trim()}</sup>`
+      case 'sub':
+        return `<sub>${children.trim()}</sub>`
+      case 'span': {
+        const style = (el.getAttribute('style') || '').toLowerCase()
+        const isBold = /font-weight\s*:\s*(bold|[6-9]00)/.test(style)
+        const isItalic = /font-style\s*:\s*italic/.test(style)
+        const isStrike = /text-decoration[^;]*:\s*[^;]*line-through/.test(style)
+        let text = children.trim()
+        if (!text) return ''
+        if (isBold && isItalic) text = `***${text}***`
+        else if (isBold) text = `**${text}**`
+        else if (isItalic) text = `*${text}*`
+        if (isStrike) text = `~~${text}~~`
+        return text
+      }
       case 'code': {
         // inline code unless inside pre
         if (el.parentElement && el.parentElement.tagName.toLowerCase() === 'pre') return children
@@ -91,7 +112,7 @@ export function htmlToMarkdown(html: string): string {
       }
       case 'a': {
         const href = el.getAttribute('href') || ''
-        const text = children.trim() || href
+        const text = (children.trim() || href).trim()
         return `[${escapeMd(text)}](${href})`
       }
       case 'img': {
@@ -104,6 +125,32 @@ export function htmlToMarkdown(html: string): string {
           .split(/\n/)
           .map((line) => (line.trim() ? `> ${line}` : '>'))
           .join('\n')
+      case 'table': {
+        const rows = Array.from(el.querySelectorAll('tr')) as HTMLTableRowElement[]
+        if (!rows.length) return ''
+        const first = rows[0]
+        const headerCells = Array.from(first.querySelectorAll('th,td')) as HTMLElement[]
+        const header = headerCells.map((c) => serialize(c).replace(/\n+/g, ' ').trim())
+        const sep = header.map(() => '---')
+        const bodyRows = rows.slice(1).map((r) => {
+          const cells = Array.from(r.querySelectorAll('th,td')) as HTMLElement[]
+          return cells.map((c) => serialize(c).replace(/\n+/g, ' ').trim())
+        })
+        let md = '\n\n'
+        md += `| ${header.join(' | ')} |\n`
+        md += `| ${sep.join(' | ')} |\n`
+        for (const row of bodyRows) {
+          md += `| ${row.join(' | ')} |\n`
+        }
+        md += '\n'
+        return md
+      }
+      case 'thead':
+      case 'tbody':
+      case 'tr':
+      case 'th':
+      case 'td':
+        return children
       case 'ul': {
         return (
           '\n' +
@@ -114,7 +161,7 @@ export function htmlToMarkdown(html: string): string {
         )
       }
       case 'ol': {
-        let i = 1
+        let i = Number(el.getAttribute('start') || '1')
         return (
           '\n' +
           Array.from(el.children)

@@ -19,6 +19,7 @@ export function SiteHeader() {
           {[
             { href: "/", label: "Home" },
             { href: "/html-to-md", label: "HTML → MD" },
+            { href: "/rich-paste", label: "Rich Paste" },
           ].map(({ href, label }) => {
             const active = pathname === href;
             return (
