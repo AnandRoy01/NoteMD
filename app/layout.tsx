@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeTransition } from "@/components/theme-transition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,17 +14,13 @@ export const metadata: Metadata = {
   description: "A modern, minimal markdown editor with real-time preview",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SiteHeader />
-          {children}
+          <ThemeTransition>{children}</ThemeTransition>
           {/* Global toaster for notifications across the app */}
           <Toaster />
         </ThemeProvider>
