@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 64 64" role="img" aria-label="NoteMD">
+  <title>NoteMD</title>
+  <rect x="6" y="6" rx="12" ry="12" width="52" height="52" fill="none" stroke="black" stroke-width="3" />
+  <path d="M46 6c4 0 6 2 6 6v10" fill="none" stroke="black" stroke-width="3" />
+  <path d="M26 24 18 32 26 40" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M38 24 46 32 38 40" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M24 46h16" fill="none" stroke="black" stroke-width="3" stroke-linecap="round" />
+</svg>

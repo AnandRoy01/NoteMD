@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 
@@ -19,8 +20,9 @@ export const SiteHeader = React.memo(function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center px-4">
-        <Link href="/" className="text-xl font-semibold">
-          NoteMD
+        <Link href="/" className="text-xl font-semibold inline-flex items-center gap-2">
+          <Logo size={24} />
+          <span>NoteMD</span>
         </Link>
         <nav className="flex-1 flex justify-center items-center gap-8 text-sm">
           {navLinks.map(({ href, label }) => {
