@@ -1,4 +1,4 @@
-export const initialMarkdown = `# Welcome to Markdown Generator
+export const initialMarkdown = `# Welcome to NoteMD
 
 ## Features
 

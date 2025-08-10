@@ -13,7 +13,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center px-4">
         <Link href="/" className="text-xl font-semibold">
-          Markdown Generator
+          NoteMD
         </Link>
         <nav className="flex-1 flex justify-center items-center gap-8 text-sm">
           {[{ href: "/", label: "Home" },{ href: "/html-to-md", label: "HTML → MD" },{ href: "/rich-paste", label: "Rich Paste" },].map(({ href, label }) => {

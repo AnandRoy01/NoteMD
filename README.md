@@ -1,4 +1,4 @@
-# Markdown Generator
+# NoteMD
 
 A modern, minimal Markdown editor with real-time preview and utilities. Built with Next.js, React, Tailwind CSS, and Radix UI.
 
