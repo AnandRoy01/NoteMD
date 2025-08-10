@@ -10,29 +10,22 @@ import { Github } from "lucide-react";
 export function SiteHeader() {
   const pathname = usePathname();
   return (
-  <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center px-4">
         <Link href="/" className="text-xl font-semibold">
           Markdown Generator
         </Link>
-        <nav className="ml-6 hidden sm:flex items-center gap-4 text-sm">
-          {[
-            { href: "/", label: "Home" },
-            { href: "/html-to-md", label: "HTML → MD" },
-            { href: "/rich-paste", label: "Rich Paste" },
-          ].map(({ href, label }) => {
+        <nav className="flex-1 flex justify-center items-center gap-8 text-sm">
+          {[{ href: "/", label: "Home" },{ href: "/html-to-md", label: "HTML → MD" },{ href: "/rich-paste", label: "Rich Paste" },].map(({ href, label }) => {
             const active = pathname === href;
             return (
               <div key={href} className="relative">
-                <Link href={href} className="hover:text-foreground/80 transition-colors">
+                <Link
+                  href={href}
+                  className={`px-3 py-1 rounded-md transition-colors ${active ? "font-bold text-foreground bg-muted/40 shadow-sm" : "hover:text-foreground/80"}`}
+                >
                   {label}
                 </Link>
-                <motion.span
-                  layoutId="nav-underline"
-                  className="absolute left-0 -bottom-1 h-0.5 bg-foreground"
-                  style={{ width: active ? "100%" : 0 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
               </div>
             );
           })}

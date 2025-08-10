@@ -111,6 +111,7 @@ export default function RichPasteToMdPage() {
             className="h-[420px] w-full resize-none overflow-auto rounded-md border bg-background p-3 font-mono text-xs"
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
+            placeholder="Markdown output will appear here..."
           />
           <div className="mt-2 flex gap-2">
             <MotionButton
