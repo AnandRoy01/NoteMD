@@ -9,16 +9,17 @@ export type MotionButtonProps = ButtonProps & {
   whileTapScale?: number;
 };
 
+const MotionBase = motion(Button as any);
+
 export const MotionButton = forwardRef<HTMLButtonElement, MotionButtonProps>(
   ({ whileHoverScale = 1.03, whileTapScale = 0.97, ...props }, ref) => {
     return (
-      <motion.button
+      <MotionBase
         whileHover={{ scale: whileHoverScale }}
         whileTap={{ scale: whileTapScale }}
-        style={{ display: "inline-block" }}
-      >
-        <Button ref={ref} {...props} />
-      </motion.button>
+        ref={ref}
+        {...props}
+      />
     );
   }
 );
