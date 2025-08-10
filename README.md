@@ -81,3 +81,27 @@ More details: see `docs/structure.md`.
 
 ---
 Happy writing! ✍️
+
+## Images (public/)
+
+The project includes a few placeholder assets under `public/` for prototyping and docs. You can reference them in the app with `/filename.ext` and in Markdown using relative paths `public/filename.ext`.
+
+- Logo (PNG): `public/placeholder-logo.png`
+
+  ![placeholder logo (PNG)](public/placeholder-logo.png)
+
+- Logo (SVG): `public/placeholder-logo.svg`
+
+  ![placeholder logo (SVG)](public/placeholder-logo.svg)
+
+- User (JPG): `public/placeholder-user.jpg`
+
+  ![placeholder user](public/placeholder-user.jpg)
+
+- Photo (JPG): `public/placeholder.jpg`
+
+  ![placeholder photo](public/placeholder.jpg)
+
+- Icon (SVG): `public/placeholder.svg`
+
+  ![placeholder icon (SVG)](public/placeholder.svg)
