@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import {
   Copy,
   Download,
@@ -13,11 +14,15 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { MotionButton } from "@/components/ui/motion-button";
 import { Toaster } from "@/components/ui/toaster";
+import { Textarea } from "@/components/ui/textarea";
 import MarkdownPreview from "@/components/markdown-preview";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { markdownToText } from "@/lib/convert";
+import Link from "next/link";
 
 const initialMarkdown = `# Welcome to Markdown Generator
 
@@ -122,6 +127,12 @@ export default function Home() {
     });
   };
 
+  const handleCopyPlainText = () => {
+    const text = markdownToText(activeTab.content);
+    navigator.clipboard.writeText(text);
+    toast({ title: "Copied plain text", description: "Markdown converted to text and copied" });
+  };
+
   const handleDownload = () => {
     const blob = new Blob([activeTab.content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -144,46 +155,40 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col">
-      <header className="border-b">
-        <div className="container flex h-14 items-center px-4">
-          <h1 className="text-xl font-semibold">Markdown Generator</h1>
+      {/* Page-local toolbar below the persistent header */}
+      <div className="border-b">
+        <div className="container flex h-12 items-center px-4 gap-2">
+          <div className="text-sm text-muted-foreground">Editor actions</div>
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={handleCopy}>
+            <MotionButton variant="ghost" size="icon" onClick={handleCopy} whileHoverScale={1.05} whileTapScale={0.95}>
               <Copy className="h-4 w-4" />
               <span className="sr-only">Copy markdown</span>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleDownload}>
+            </MotionButton>
+            <MotionButton variant="ghost" size="sm" onClick={handleCopyPlainText} title="Copy as plain text" whileHoverScale={1.03} whileTapScale={0.97}>
+              Copy Text
+            </MotionButton>
+            <MotionButton variant="ghost" size="icon" onClick={handleDownload} whileHoverScale={1.05} whileTapScale={0.95}>
               <Download className="h-4 w-4" />
               <span className="sr-only">Download markdown</span>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={toggleFullscreen}>
+            </MotionButton>
+            <MotionButton variant="ghost" size="icon" onClick={toggleFullscreen} whileHoverScale={1.05} whileTapScale={0.95}>
               {isFullscreen ? (
                 <Minimize2 className="h-4 w-4" />
               ) : (
                 <Maximize2 className="h-4 w-4" />
               )}
               <span className="sr-only">Toggle fullscreen</span>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1"
-              >
-                <Github className="h-3.5 w-3.5" />
-                <span>GitHub</span>
-              </a>
-            </Button>
+            </MotionButton>
           </div>
         </div>
-      </header>
+      </div>
 
       <div className="container flex-1 p-4 flex flex-col">
         <div className="flex items-center border-b mb-4">
           <div className="flex-1 flex overflow-x-auto">
             {tabs.map((tab) => (
-              <button
+              <motion.button
+                whileHover={{ y: -1 }}
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
@@ -201,7 +206,7 @@ export default function Home() {
                   <X className="h-3.5 w-3.5" />
                   <span className="sr-only">Close tab</span>
                 </button>
-              </button>
+              </motion.button>
             ))}
           </div>
           <Button
